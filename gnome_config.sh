@@ -115,7 +115,7 @@ dconf write /org/gnome/desktop/interface/icon-theme "'WhiteSur-grey-dark'"
 
 # Establecer fuentes
 dconf write /org/gnome/desktop/interface/font-name "'Noto Sans 11'"
-dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans CJK HK 11'"
+dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans 11'"
 dconf write /org/gnome/desktop/interface/monospace-font-name "'Monospace 10'"
 dconf write /org/gnome/desktop/wm/preferences/titlebar-font "'Noto Sans JP Bold 11'"
 
