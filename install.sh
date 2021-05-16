@@ -1,6 +1,7 @@
 #!/bin/bash
 
 pkill packagekitd
+systemctl disable --now packagekit
 
 # Validacion del usuario ejecutando el script
 R_USER=$(id -u)
@@ -108,6 +109,7 @@ PAQUETES=(
     'lshw'
     'flameshot'
     'ktouch'
+    'xdpyinfo'
 
     #### Editores ####
     'emacs'
@@ -219,6 +221,15 @@ if [ "$AW" == 'S' ]; then
         zypper install -y "$PAQ"
     done
     sed -i 's/Name=awesome/Name=Awesome/g' "/usr/share/xsessions/awesome.desktop"
+fi
+#################################################################################
+
+################################ Wallpapers #####################################
+read -rp "Instalar Wallpapers? (S/N): " WPP
+if [ "$WPP" == 'S' ]; then
+    echo -e "\nInstalando wallpapers..."
+    git clone https://github.com/gastongmartinez/wallpapers.git
+    mv -f wallpapers/ "/usr/share/backgrounds/"
 fi
 #################################################################################
 
