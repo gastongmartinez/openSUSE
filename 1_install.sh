@@ -149,12 +149,8 @@ PAQUETES=(
     'fontawesome-fonts'
     'saja-cascadia-code-fonts'
     'google-roboto-mono-fonts'
-    'google-roboto-slab-fonts'
     'fetchmsttfonts'
-    'iosevka-fonts'
-    'iosevka-slab-fonts'
     'google-caladea-fonts'
-    'fira-code-fonts'
   
     #### Dev ####
     'git'
