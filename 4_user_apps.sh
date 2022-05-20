@@ -12,6 +12,7 @@ flatpak --user install flathub org.kde.krita -y
 flatpak --user install flathub org.gimp.GIMP -y
 flatpak --user install flathub org.blender.Blender -y
 flatpak --user install flathub io.neovim.nvim -y
+flatpak --user install flathub io.github.shiftey.Desktop -y
 
 # Doom Emacs
 if [ -d ~/.emacs.d ]; then
