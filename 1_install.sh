@@ -39,6 +39,7 @@ pkill packagekitd
 zypper dup -y
 
 systemctl enable sshd
+firewall-cmd --zone=public --permanent --add-service=ssh
 
 # Ajuste Swappiness
 su - root <<EOF
@@ -47,47 +48,50 @@ EOF
 
 rpm --import https://packages.microsoft.com/keys/microsoft.asc
 zypper addrepo https://packages.microsoft.com/yumrepos/vscode vscode
+
+rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+zypper addrepo https://brave-browser-rpm-release.s3.brave.com/x86_64/ brave-browser
 zypper refresh
 
 ################################ Apps Generales #################################
 PAQUETES=(
-    #### Compresion ####
-    'file-roller'
-    'p7zip'
-    'unrar'
-    'unzip'
-    'zip'
-    
-    #### Fuentes ####
-    'terminus-bitmap-fonts'
-    'dejavu-fonts'
-    'powerline-fonts'
-    'ubuntu-fonts'
-    'fontawesome-fonts'
-    'saja-cascadia-code-fonts'
-    'google-roboto-fonts'
-    'google-roboto-mono-fonts'
-    'google-roboto-slab-fonts'
-    'fetchmsttfonts'
-    'iosevka-fonts'
-    'iosevka-slab-fonts'
+    #### Powermanagement ####
+    'tlp'
+    'tlp-rwd'
+    'powertop'
 
+    #### KDE ####
+    'kcron'
+    'krusader'
+    'krusader-doc'
+    'knotes'
+    'kfind'
+    'kalarm'
+    'dolphin-plugins'
+    'yakuake'
+    'kmymoney'
+    'kruler'
+    'kcolorchooser'
+    'kalgebra'
+    'ktouch'
+    'cantor'
+    'kdiff3'
+    'kdevelop5'
+    'latte-dock'
+    
     #### WEB ####
-    'wget'
-    'curl'
     'chromium'
     'MozillaThunderbird'
     'remmina'
     'qbittorrent'
-       
+    'brave-browser'
+
     #### Terminales ####
     'alacritty'
-    
+
     #### Shells ####
-    'fish'
     'zsh'
     'alacritty-bash-completion'
-    'alacritty-fish-completion'
     'alacritty-zsh-completion'
     'ShellCheck'
     'autojump'
@@ -102,86 +106,81 @@ PAQUETES=(
     'fuse-exfat'
 
     #### Sistema ####
+    'unrar'
     'conky'
     'ntp'  
     'htop'
     'neofetch'
     'lshw'
     'flameshot'
-    'ktouch'
     'xdpyinfo'
+    'the_silver_searcher'
+    'fzf'
+    'aspell'
+    'powerline'
+    'foliate'
+    'pandoc'
+    'file-roller'
+    'zip'
+    
+    #### Multimedia ####
+    'mpv'
 
     #### Editores ####
     'emacs'
-    'neovim'
     'code'
-
-    #### Multimedia ####
-    'clementine'
-    'mpv'
-    'vlc'
 
     #### Juegos ####
     'chromium-bsu'
-    
+    'retroarch'
+    'retroarch-assets'
+
     #### Redes ####
+    'nmap'
     'nmapsi4'
     'wireshark-ui-qt'
-
-    #### Diseño ####
-    'gimp'
-    'inkscape'
-    'krita'
-    'blender'
-    'FreeCAD'
+    'firewall-config'
+    'firewall-applet'    
+      
+    #### Fuentes ####
+    'terminus-bitmap-fonts'
+    'powerline-fonts'
+    'ubuntu-fonts'
+    'fontawesome-fonts'
+    'saja-cascadia-code-fonts'
+    'google-roboto-mono-fonts'
+    'google-roboto-slab-fonts'
+    'fetchmsttfonts'
+    'iosevka-fonts'
+    'iosevka-slab-fonts'
+    'google-caladea-fonts'
+    'fira-code-fonts'
   
-    # Dev
+    #### Dev ####
     'git'
     'go'
     'clang'
+    'cmake'
+    'meson'
     'rust'
+    'cargo'
     'filezilla'
-    'codeblocks'
-    'python3'
-    'python39'
-    'python39-pip'
-    'nodejs15'
-    'npm15'
+    'nodejs16'
+    'npm16'
+    'yarn'
     'java-1_8_0-openjdk'
+    'gcc-c++'
     #'java-15-openjdk'
-    #'ghc'
-    #'cabal-install'  
+
+    #### PostgreSQL ####
+    'postgresql-server'
+    'postgresql-plpython'
+    'pgadmin4'
+    'pgadmin4-web-uwsgi'
 )
 for PAQ in "${PAQUETES[@]}"; do
     zypper install -y "$PAQ"
 done
-#################################################################################
-
-################################## KDE ##########################################
-read -rp "Instalar KDE Apps? (S/N): " KDE
-if [ "$KDE" == 'S' ]; then
-    KDEAPPS=(
-        'kcron'
-        'krusader'
-        'krusader-doc'
-        'knotes'
-        'kfind'
-        'kalarm'
-        'dolphin-plugins'
-        'yakuake'
-        'kmymoney'
-        'kruler'
-        'kcolorchooser'
-        'kalgebra'
-        'cantor'
-        'kdiff3'
-        'kdevelop5'
-        'latte-dock'
-    )
-    for PAQ in "${KDEAPPS[@]}"; do
-        zypper install -y "$PAQ"
-    done
-fi
 #################################################################################
 
 ############################### Virtualizacion ##################################
@@ -193,9 +192,6 @@ if [ "$VIRT" == 'S' ]; then
         'qemu-extra'
         'vde2'
         'bridge-utils'
-        'virtualbox'
-        'virtualbox-guest-tools'
-        'virtualbox-guest-x11'
     )
     for PAQ in "${VAPPS[@]}"; do
         zypper install -y "$PAQ"
@@ -232,27 +228,3 @@ if [ "$WPP" == 'S' ]; then
     mv -f wallpapers/ "/usr/share/backgrounds/"
 fi
 #################################################################################
-
-######################## Extensiones Gnome ######################################    
-read -rp "Instalar Extensiones Gnome? (S/N): " EXT
-if [ "$EXT" == 'S' ]; then
-    zypper install -y gnome-shell-extension-pop-shell
-    zypper install -y gnome-shell-extension-user-theme
-    zypper install -y gnome-shell-extensions-common
-    zypper install -y gnome-shell-extensions-common-lang
-    HOMEDIR=$(grep "1000" /etc/passwd | awk -F : '{ print $6 }')
-    USER=$(grep "1000" /etc/passwd | awk -F : '{ print $1 }')
-    PWD=$(pwd)
-    for ARCHIVO in "$PWD"/Extensiones/*.zip
-    do
-        UUID=$(unzip -c "$ARCHIVO" metadata.json | grep uuid | cut -d \" -f4)
-        mkdir -p "$HOMEDIR"/.local/share/gnome-shell/extensions/"$UUID"
-        unzip -q "$ARCHIVO" -d "$HOMEDIR"/.local/share/gnome-shell/extensions/"$UUID"/
-    done
-    chown -R "$USER":users "$HOMEDIR"/.local/
-fi
-#################################################################################
-
-
-
-
