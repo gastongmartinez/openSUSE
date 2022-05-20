@@ -163,7 +163,6 @@ PAQUETES=(
     'filezilla'
     'nodejs16'
     'npm16'
-    'yarn'
     'java-1_8_0-openjdk'
     'gcc-c++'
     #'java-15-openjdk'
