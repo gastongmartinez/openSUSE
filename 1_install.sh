@@ -57,7 +57,7 @@ zypper refresh
 PAQUETES=(
     #### Powermanagement ####
     'tlp'
-    'tlp-rwd'
+    'tlp-rdw'
     'powertop'
 
     #### KDE ####
